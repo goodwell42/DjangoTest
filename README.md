@@ -1,12 +1,16 @@
 ## Django Note
 
+`以一个极简的博客网站为例，领略Diango。`
+
+本笔记提炼自[慕课网某教程](https://www.imooc.com/learn/790)
+
 ### 创建项目
 
 #### 步骤
 
 在工作目录打开命令行，输入
 
-```
+```shell
 django-admin.py startproject project_name
 
 eg:  django-admin.py startproject myblog
@@ -41,7 +45,7 @@ manage.py
 
 在项目 *manage.py* 同级目录下打开命令行中，输入
 
-```
+```shell
 python manage.py startapp blog
 ```
 
@@ -131,8 +135,6 @@ views.py
 
 ### Templates
 
-#### 介绍
-
 HTML文件，使用了Django模板语言（Django Template Language, DTL），可以使用第三方模板
 
 #### 步骤
@@ -173,7 +175,7 @@ render() 函数三个参数
 
 3. 生成数据表：命令行进入manage.py 同级目录，执行
 
-   ```
+   ```shell
    python manage.py makemigrations app名（可选）
    
    python manage.py migrate
@@ -193,19 +195,16 @@ class Article(models.Model):
     content = models.TextField(null=True)
 ```
 
-#### 查看
+#### 数据库查看
 
 自动在app/migrations/目录下生成移植文件，执行
 
-```
+```shell
 python manage.py sqlmigrate 应用名 文件id
 ```
 
-查看SQL语句，默认sqlite3 的数据库在项目根目录下db.sqlite3
-
-#### 查看并编辑db.sqlite3
-
-使用第三方软件： SQLite Expert Personal (免费，轻量级)
+- 查看SQL语句，默认sqlite3 的数据库在项目根目录下db.sqlite3
+- 查看并编辑db.sqlite3,使用第三方软件： SQLite Expert Personal (免费，轻量级)
 
 #### 页面呈现数据
 
@@ -240,7 +239,7 @@ def index(request):
 
 1. 创建用户（超级用户）： 命令行输入
 
-   ```
+   ```shell
    python manage.py createsuperuser
    ```
 
@@ -250,7 +249,7 @@ def index(request):
 
 2. 配置应用：
 
-    在应用下**admin,py** 中引入**自身的models**模块（或里面的模型类）
+   在应用下**admin,py** 中引入**自身的models**模块（或里面的模型类）
 
    编辑admin.py： admin.site.register(models.Article)
 
@@ -281,5 +280,50 @@ def index(request):
    
    ```
 
+### 补充内容
+
+#### Template过滤器
+
+```
+{{ value | filter }}
+
+eg:可叠加：{{ list_nums | length }}
+```
+
+#### Django Shell
+
+自动引入项目环境，命令行输入
+
+```shell
+python manage.py shell
+```
+
+可以来进行调试，可以用于测试未知的方法
+
+```shell
+from blog.models import Article
+Article.objects.all()
+```
+
+#### Admin增强
+
+1. 创建admin配置类
+
+   ```
+   class ArticleAdmin(admin.ModelAdmin)
    
+   注册: admin.site.register(Article, ArticleAdmin)
+   ```
+
+2. 显示其他字段
+
+   ```python
+   list_display = ('title', 'content')
+   ```
+
+3. 过滤器
+
+   ```
+   list_filter = ('pub_time',)
+   ```
 
